@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html>
+<html ng-app="sampleApp">
+
+<head>
+    
+    <title>Registration Form</title>
+    <script src="Libraries/angular.js"></script>
+    <link href="Libraries/bootstrap.css" rel="stylesheet" />
+    <link href="Libraries/bootstrap-theme.css" rel="stylesheet" />
+    <script>
+    angular.module("sampleApp", [])
+    .controller("defaultCtrl", function($scope) {
+
+        $scope.addNewUser = function(userDetails) {
+            $scope.message = "ФИО " + userDetails.name + "\nEmail " + userDetails.email + "\nТелефон " + userDetails.phone + "\nПароль " + userDetails.password + "\nПодтвердите пароль " + userDetails.confirm;
+            return confirm($scope.message);
+        };
+        $scope.matchPattern = new RegExp("[а-яА-ЯёЁ]");
+       
+    });
+
+
+            
+    
+    </script>
+    <style>
+        
+        
+        form .pink.ng-invalid.ng-dirty {
+            background-color: lightpink;
+        }
+        
+        form .ng-valid.ng-dirty {
+            background-color: lightgreen;
+        }
+       
+        /*валидация происходит после каждого изменения в форме. Два след правила используются для элемента span  в конце формы*/
+        span {
+            color: red;
+            font-weight: bold;
+        }
+        form .password.ng-invalid.ng-dirty {
+            background-color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="panel container" ng-controller="defaultCtrl" style="width: 350px">
+        <form name="myForm" novalidate ng-submit="addNewUser(newUser)">
+        
+            <div class="well">
+                <div class="form-group">
+                    <label>Name:</label>
+                    <input type="text" name="userName" class="form-control pink" ng-model="newUser.name" required ng-pattern="matchPattern" ng-minlength="6" />
+                    <span ng-show="myForm.userName.$error.pattern && myForm.userName.$dirty">Допустимы только русские буквы</span>
+                    <span ng-show="myForm.userName.$error.minlength && myForm.userName.$dirty">Слишком мало символов</span>
+                    <span ng-show="myForm.userName.$error.required && myForm.userName.$dirty">Поле не должно быть пустым</span>
+                </div>
+
+                <div class="form-group">
+                    <label>Email:</label>
+                    <input type="email" name="userEmail" class="form-control pink" ng-model="newUser.email" required />
+                    <span ng-show="myForm.userEmail.$error.required && myForm.userEmail.$dirty">Поле не должно быть пустым</span>
+                    <span ng-show="myForm.userEmail.$error.email && myForm.userEmail.$dirty">Введите правильный email</span>
+                </div>
+
+                <div class="form-group">
+                    <label>Телефон:</label>
+                    <input name="userPhone" type="number" class="form-control pink" required ng-model="newUser.phone" ng-maxlength="9" ng-minlength="9" />
+                    <span ng-show="myForm.userPhone.$invalid && myForm.userPhone.$dirty">Необходимо ввести ровно 9 цифр!</span>
+                </div>
+                
+                <div class="form-group">
+                    <label>Пароль:</label>
+                    <input name="userPassword" type="password" class="form-control password"  ng-model="newUser.password" data-ng-class="{'ng-invalid':myForm.userConfirm.$error.pattern ||myForm.userConfirm.$error.required }" />
+                </div>
+
+                <div class="form-group">
+                    <label>Подтвердите пароль:</label>
+                    <input name="userConfirm" type="password" class="form-control" ng-model="newUser.confirm" ng-pattern="newUser.password" required/>
+                </div>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" name="agreed" ng-model="newUser.agreed" required />
+                        Согласен с условиями использования
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block" ng-disabled="myForm.$invalid">
+                OK
+                </button>
+            </div>
+
+            
+        </form>
+    </div>
+</body>
+
+</html>

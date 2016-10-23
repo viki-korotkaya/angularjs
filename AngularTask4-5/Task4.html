@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" ng-app="sampleApp">
+
+<head>
+    <meta charset="UTF-8">
+    <title>$broadcast</title>
+    <script src="Libraries/angular.js"></script>
+    <script src="data.js"></script>
+    <link href="Libraries/bootstrap-theme.css" rel="stylesheet" />
+    <link href="Libraries/bootstrap.css" rel="stylesheet" />
+    <style>
+    .container {
+        width: 600px;
+        .center-block();
+    }
+    
+    .panel {
+        margin-top: 10px;
+        width: 600px;
+    }
+    </style>
+    <script>
+    var app = angular.module("sampleApp", []);
+
+    app.controller("loginCtrl", function($scope, $rootScope) {
+       $scope.countries = ["Belarus", "USA", "Greece"];
+        $scope.show = function () {
+            $rootScope.$broadcast("DataEvent", {
+                    name: $scope.userName,
+                    country: $scope.userCountry
+            });
+        }
+    });
+
+    app.controller("receiverCtrl", function($scope) {
+      
+        $scope.$on("DataEvent", function (event, args) {
+                $scope.infoName = args.name;
+               $scope.infoCountry = args.country
+                $scope.showElem = true;
+            $scope.data = model;
+            $scope.getCurrency = function (infoCountry) {
+                switch (infoCountry) {
+                    case "Belarus":
+                        return "BYN";
+                    case "USA":
+                        return "USD";
+                    case "Greece":
+                        return "EUR";    
+                };
+            };
+            $scope.getPrice = function(infoCountry, item) {
+                var currency = $scope.getCurrency(infoCountry);
+                switch (currency) {
+                    case "BYN":
+                        return item.BYN;
+                    case "USD":
+                        return item.USD;
+                    case "EUR":
+                        return item.EUR;    
+                };
+            };
+        
+             });
+    });
+    </script>
+</head>
+
+<body class="container">
+    <div ng-controller="receiverCtrl" class="basic_element panel well" ng-show="showElem">
+        <h4>
+            Hello <strong>{{infoName}}</strong> from great country <strong>{{infoCountry}}</strong>!<br>
+            Please check out our cofee list bellow:
+        </h4>
+    </div>
+    <div class="panel well" ng-controller="loginCtrl" style="width: 600px;">
+        <form>
+            <div class="form-group">
+                <label>Name:</label>
+                <input type="text" name="name" class="form-control" ng-model="userName">
+            </div>
+            <div class="form-group">
+                <label>Country:</label>
+                <select class="form-control" ng-options="country for country in countries" ng-model="userCountry"></select>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block" ng-click="show()">
+                Show
+            </button>
+        </form>
+    </div>
+    <div ng-controller="receiverCtrl" class="basic_element panel well" ng-show="showElem">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <td>Name</td>
+                    <td>Currency</td>
+                    <td>Price</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in data">
+                    <td>{{item.CoffeeName}}</td>
+                    <td>{{getCurrency(infoCountry)}}</td>
+                    <td>{{getPrice(infoCountry, item)}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" ng-app="newsListApp">
+<head>
+    <title>Task 1 </title>
+    <script src="Libraries/angular.js"></script>
+    <script src="model.js"></script>
+    <link href="Libraries/bootstrap.css" rel="stylesheet" />
+    <link href="Libraries/bootstrap-theme.css" rel="stylesheet" />
+    <script type="text/javascript">
+        //Модуль
+        var newsListApp = angular.module("newsListApp", []);
+
+        //Контроллер
+        newsListApp.controller("NewsListCtrl", function($scope) {
+                $scope.data = model;
+
+        });
+    </script>
+</head>
+<body ng-controller="NewsListCtrl">
+	<div class="container" style="margin-top: 20px;">
+		<div class="panel panel-default">
+            <h1 class="panel-heading">
+                Frontend News
+            </h1>
+
+        	<div class="panel-body">
+        		<div class="well" ng-repeat="news in data">
+        			<h3>{{news.title}}</h3>
+        			<h5>{{news.published}}</h5>
+        			<p>{{news.description}}</p>
+
+        			<button type="button" class="btn btn-primary">Читать далее</button>
+        		</div>
+        	
+        	</div>
+    	</div>
+	</div>
+</body>
+</html>

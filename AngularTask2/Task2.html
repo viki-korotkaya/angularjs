@@ -1,0 +1,113 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" ng-app="taskListApp">
+<head>
+    <title>ToDo List (Task2)</title>
+    <script src="Libraries/angular.js"></script>
+    <link href="Libraries/bootstrap.css" rel="stylesheet" />
+    <link href="Libraries/bootstrap-theme.css" rel="stylesheet" />
+    <script src="todo.js"></script>
+    <script>
+
+        // Модуль
+        var taskListApp = angular.module("taskListApp", []);
+
+        // Контроллер
+
+        taskListApp.controller("TaskListCtrl", function ($scope) {
+
+            $scope.tasks = todoModel.read();
+
+            // Обработчик нажатия по кнопке
+           // Обработчик нажатия по кнопке
+            $scope.addNewTask = function () {
+
+               /* $scope.tasks.push({
+                    name: $scope.taskName,
+                    duedate: $scope.dateName,
+                    description: $scope.dateDescription,
+                    completed: $scope.completed
+                });*/
+
+                todoModel.addItem($scope.taskName, $scope.dateName, $scope.dateDescription, $scope.completed);
+                todoModel.save();
+                $scope.taskName = "";
+                $scope.dateName = "";
+                $scope.dateDescription = "";
+                $scope.completed = false;
+
+               
+                
+            };
+            
+
+        });
+
+    </script>
+
+</head>
+<body ng-controller="TaskListCtrl">
+
+    <div class="container panel">
+
+        <h3>ToDo List</h3>
+
+        <table class="table" style="margin-bottom: 20px;">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Due Date</th>
+                    <th>Completed</th>
+                </tr>
+            </thead>
+            <tr ng-repeat="obj in tasks">
+                <td>{{obj.name}}</td>
+                <td>{{obj.description}}</td>
+                <td>{{obj.duedate | date:'dd.MM.yyyy'}}</td>
+                <td>{{obj.completed}}</td>
+            </tr>
+        </table>
+
+        <div>
+            <form class="form-horizontal">
+            <div class="form-group row">
+                <label for="input1" class="col-sm-2 control-label">Name</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="input1" placeholder="Task Name" ng-model="taskName" />
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="input2" class="col-sm-2 control-label">Due Date</label>
+                <div class="col-sm-10">
+                    <input type="date" class="form-control" id="input2" placeholder="дд.мм.гггг" ng-model="dateName" />
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="input3" class="col-sm-2 control-label">Description</label>
+                <div class="col-sm-10">
+                <textarea id="input3" class="form-control" rows="3" ng-model="dateDescription"></textarea>
+                    
+                </div>
+            </div>
+
+             <div class="form-group row">
+                <label for="input4" class="col-sm-2 control-label">Completed</label>
+                <div class="col-sm-10" class="checkbox">
+                    
+                    <input type="checkbox" id="input4" ng-model="completed" /> 
+                </div>
+                
+            </div>
+
+            <div class="form-group row">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button type="submit" class="btn btn-default" ng-click="addNewTask()">Add</button>
+                </div>
+            </div>
+        </form>
+        </div>
+    </div>
+</body>
+</html>
